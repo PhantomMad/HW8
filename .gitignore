@@ -164,3 +164,4 @@ venv/
 ansible.cfg.orig
 hosts.cfg.orig
 cryptfile.txt
+hipriv.yml

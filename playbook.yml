@@ -1,0 +1,33 @@
+---
+- name: Deploy NGINX
+  hosts: PC1
+
+  tasks:
+    - name: Install WEB server
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy index.html to web workspace
+      copy:
+        src: /opt/index.html
+        dest: /var/www/html
+
+    - name: Ensure if web service is started
+      service:
+        name: nginx
+        state: started
+
+- name: Deploy DB
+  hosts: PC2
+
+  tasks:
+    - name: Install Postgesql
+      apt:
+        name: postgresql
+        state: present
+
+    - name: Ensure if postgesql service is started
+      service:
+        name: postgresql
+        state: started
