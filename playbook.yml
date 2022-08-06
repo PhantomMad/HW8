@@ -29,5 +29,5 @@
 
     - name: Ensure if postgesql service is started
       service:
-        name: postgesql
+        name: postgresql
         state: started
