@@ -163,4 +163,4 @@ venv/
 #Ansible
 ansible.cfg.orig
 hosts.cfg.orig
-admin
+
