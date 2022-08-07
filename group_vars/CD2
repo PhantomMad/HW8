@@ -1,2 +1,9 @@
 ---
-tomcat_source: /home/packages/tomcat
+tomcat_source: '/home/packages/tomcat'
+maven_env:
+      - key: 'M2_HOME'
+        value: '/opt/maven'
+      - key: 'MAVEN_HOME'
+        value: '/opt/maven'
+      - key: 'PATH'
+        value: '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${M2_HOME}/bin:${PATH}"'

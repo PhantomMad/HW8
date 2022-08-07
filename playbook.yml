@@ -2,14 +2,6 @@
 - name: Set maven on server
   hosts: PC2
   become: yes
-  vars:
-    maven_env:
-      - key: 'M2_HOME'
-        value: '/opt/maven'
-      - key: 'MAVEN_HOME'
-        value: '/opt/maven'
-      - key: 'PATH'
-        value: '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${M2_HOME}/bin:${PATH}"'
 
   tasks:
     - name: Set env for maven
