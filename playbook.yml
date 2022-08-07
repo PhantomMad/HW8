@@ -4,9 +4,9 @@
 
   tasks:
     - name: Ensure if web service is started
-          service:
-            name: nginx
-            state: stopped
+      service:
+        name: nginx
+        state: stopped
 
     - name: Remove WEB server
       apt:
@@ -20,9 +20,9 @@
 
   tasks:
     - name: Ensure if postgesql service is started
-        service:
-          name: postgresql
-          state: stopped
+      service:
+        name: postgresql
+        state: stopped
 
     - name: Remove Postgesql
       apt:
