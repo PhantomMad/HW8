@@ -5,10 +5,9 @@
   tasks:
     - name: Pull github repository
       git:
-        repo: git@github.com:PhantomMad/HW8.git
-        version: develop
-        dest: /etc/ansible
-        clone: no
+        repo: "{{ git_repository}}"
+        version: "{{ git_branch }}"
+        dest: "{{ git_local_folder }}"
         update: yes
 
 
