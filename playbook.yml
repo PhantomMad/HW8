@@ -1,15 +1,10 @@
 ---
 - name: Set maven on server
   hosts: PC2
-
-  tasks:
-    - name: Set environment on system to maven
-      environment:
-        M2_HOME: "/opt/maven"
-        MAVEN_HOME: "/opt/maven"
-        PATH: "${M2_HOME}/bin:${PATH}"
-
-
+  environment:
+    M2_HOME: "/opt/maven"
+    MAVEN_HOME: "/opt/maven"
+    PATH: "${M2_HOME}/bin:${PATH}"
 
 #- name: Sync repository to master(this is strange, but i just less)
 #  hosts: MASTER
