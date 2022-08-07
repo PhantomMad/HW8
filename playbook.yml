@@ -1,7 +1,6 @@
 ---
 - name: Sync repository to master
   hosts: MASTER
-  become: yes
 
   tasks:
     - name: Pull github repository
@@ -9,8 +8,7 @@
         repo: git@github.com:PhantomMad/HW8.git
         version: develop
         dest: /etc/ansible
-        key_file: /home/devopsadmin/.ssh/ublrn_1_rsa
         clone: no
         update: yes
-      become_user: devopsadmin
+
 
