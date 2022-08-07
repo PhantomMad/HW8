@@ -1,6 +1,7 @@
 ---
 - name: Sync repository to master
   hosts: MASTER
+  become: yes
 
   tasks:
     - name: Pull github repository
