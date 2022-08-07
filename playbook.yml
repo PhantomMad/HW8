@@ -1,19 +1,22 @@
 ---
-- name: Sync repository to master
-  hosts: MASTER
-  become: no
+#- name: Sync repository to master(this is strange, but i just less)
+#  hosts: MASTER
+#  become: no
+
+#  tasks:
+#    - name: Pull github repository
+#      git:
+#        repo: "{{ git_repository}}"
+#        version: "{{ git_branch }}"
+#        dest: "{{ git_local_folder }}"
+#        update: yes
+
+- name: Set maven on server
+  hosts: PC2
 
   tasks:
-    - name: Pull github repository
-      git:
-        repo: "{{ git_repository}}"
-        version: "{{ git_branch }}"
-        dest: "{{ git_local_folder }}"
-        update: yes
-
-    - name: Create file on master
-      file:
-        src: /tmp/test.txt
-        state: touch
-
-
+    name: Set environment on system to maven
+    environment:
+      M2_HOME: /opt/maven
+      MAVEN_HOME: /opt/maven
+      PATH: ${M2_HOME}/bin:${PATH}
