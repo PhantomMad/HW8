@@ -1,14 +1,19 @@
 ---
-- name: Set maven on server
-  hosts: CD2
+- name: Install Java on required servers
+  hosts: ALL_HW_SERVERS
   become: yes
-
   tasks:
 
     - name: Install Java VM
       ansible.builtin.apt:
         name: default-jdk
         state: latest
+
+
+- name: Set maven on server
+  hosts: CD2
+  become: yes
+  tasks:
 
     - name: Set env for maven
       ansible.builtin.lineinfile:
