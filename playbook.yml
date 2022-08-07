@@ -1,3 +1,14 @@
 ---
-- name: Execute HW7
+- name: Sync repository to master
+  hosts: MASTER
+
+  tasks:
+    - name: Pull github repository
+      git:
+        repo: {{ git_repository }}
+        version {{ git_branch }}
+        dest: {{ git_local_folder }}
+        clone: no
+        update: yes
+
 
