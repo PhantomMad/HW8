@@ -1,33 +1,79 @@
 ---
-- name: Deploy NGINX
-  hosts: PC1
-
+- name: Install Java on required servers
+  hosts: ALL_HW_SERVERS
+  become: yes
   tasks:
-    - name: Install WEB server
-      apt:
-        name: nginx
-        state: present
 
-    - name: Copy index.html to web workspace
-      copy:
-        src: /opt/index.html
-        dest: /var/www/html
+    - name: Install Java VM
+      ansible.builtin.apt:
+        name: default-jdk
+        state: latest
 
-    - name: Ensure if web service is started
-      service:
-        name: nginx
-        state: started
 
-- name: Deploy DB
-  hosts: PC2
-
+- name: Set maven on server
+  hosts: CD2
+  become: yes
   tasks:
-    - name: Install Postgesql
-      apt:
-        name: postgresql
-        state: present
 
-    - name: Ensure if postgesql service is started
-      service:
-        name: postgresql
-        state: started
+    - name: Set env for maven
+      ansible.builtin.lineinfile:
+        path: "/etc/environment"
+        state: present
+        regexp: "^{{ item.key }}="
+        line: "{{ item.key }}={{ item.value }}"
+      with_items: "{{ maven_env }}"
+
+    - name: Create directory for maven
+      ansible.builtin.file:
+        path: "{{ maven_dest }}"
+        state: directory
+        mode: '0755'
+
+    - name: Download required maven
+      ansible.builtin.get_url:
+        url: "{{ maven_link }}"
+        dest: "{{ maven_dest }}"
+        checksum: "{{ maven_sha }}"
+
+    - name: Unpack maven archive
+      ansible.builtin.unarchive:
+         src: "{{ maven_archive }}"
+         dest: "{{ maven_dest }}"
+         remote_src: yes
+         extra_opts:
+           - --strip-components=1
+
+    - name: Create link maven to bin
+      ansible.builtin.file:
+        src: "{{ mvn }}"
+        dest: '/bin/mvn'
+        state: link
+
+    - name: Remove maven archive
+      ansible.builtin.file:
+        path: "{{ maven_archive }}"
+        state: absent
+
+    - name: Create directory for gitclone
+      ansible.builtin.file:
+        path: "{{ git_clone_tmp }}"
+        state: directory
+        mode: '0755'
+
+    - name: Clone github repository
+      ansible.builtin.git:
+        repo: "{{ git_clone_url }}"
+        dest: "{{ git_clone_tmp }}"
+        clone: yes
+        update: no
+
+    - name: Build java project
+      command: 'mvn package'
+      args:
+        chdir: "{{ git_clone_tmp }}"
+
+
+    - name: Print result of current build
+      ansible.builtin.debug:
+        var: result
+        verbosity: 1
