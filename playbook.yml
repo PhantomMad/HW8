@@ -66,3 +66,15 @@
         dest: "{{ git_clone_tmp }}"
         clone: yes
         update: no
+
+
+    - name: Build java project
+      ansible.builtin.command:
+        cmd: 'mvn package'
+        args:
+          chdir: "{{ git_clone_tmp }}"
+
+    - name: Print result of current build
+      ansible.builtin.debug:
+        var: result
+        verbosity: 1
