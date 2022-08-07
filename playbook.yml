@@ -1,6 +1,13 @@
 ---
 - name: Set maven on server
   hosts: PC2
+  maven_env:
+    - key: 'M2_HOME'
+      value: '/opt/maven'
+    - key: 'MAVEN_HOME'
+      value: '/opt/maven'
+    - key: 'PATH'
+      value: '${M2_HOME}/bin:${PATH}'
 
   tasks:
     - name: Set env for maven
