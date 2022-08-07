@@ -39,15 +39,15 @@
            - --strip-components=1
 
     - name: Create link maven to bin
-        ansible.builtin.file:
-          src: "{{ mvn }}"
-          dest: '/bin/mvn'
-          state: link
+      ansible.builtin.file:
+        src: "{{ mvn }}"
+        dest: '/bin/mvn'
+        state: link
 
     - name: Remove maven archive
-        ansible.builtin.file:
-          path: "{{ maven_archive }}"
-          state: absent
+      ansible.builtin.file:
+        path: "{{ maven_archive }}"
+        state: absent
 
 
 #- name: Sync repository to master(this is strange, but i just less)
