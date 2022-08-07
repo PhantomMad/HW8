@@ -21,7 +21,7 @@
     - name: Download latest maven
       ansible.builtin.get_url:
         url: "{{ maven_link }}"
-        dest: "{{ maven_dest }}"
+        dest: "{{ maven_archive }}"
         checksum: "{{ maven_sha }}"
 
     - name: Unpack maven archive
