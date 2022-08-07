@@ -1,9 +1,2 @@
 ---
 maven_source: '/home/packages/maven'
-maven_env:
-  - key: 'M2_HOME'
-    value: '/opt/maven'
-  - key: 'MAVEN_HOME'
-    value: '/opt/maven'
-  - key: 'PATH'
-    value: '${M2_HOME}/bin:${PATH}'
