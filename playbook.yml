@@ -50,10 +50,10 @@
         state: absent
 
     - name: Create directory for gitclone
-        ansible.builtin.file:
-          path: "{{ git_clone_tmp }}"
-          state: directory
-          mode: '0755'
+      ansible.builtin.file:
+        path: "{{ git_clone_tmp }}"
+        state: directory
+        mode: '0755'
 
     - name: Clone github repository
       ansible.builtin.git:
