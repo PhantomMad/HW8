@@ -1,6 +1,6 @@
 ---
 - name: Set maven on server
-  hosts: PC2
+  hosts: CD2
   become: yes
 
   tasks:
