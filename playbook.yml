@@ -12,7 +12,24 @@
         line: "{{ item.key }}={{ item.value }}"
       with_items: "{{ maven_env }}"
 
+    - name: Create directory for maven
+      ansible.builtin.file:
+        path: "{{ maven_dest }}"
+        state: directory
+        mode: '0755'
 
+    - name: Download latest maven
+      ansible.builtin.get_url:
+        url: "{{ maven_link }}"
+        dest: "{{ maven_dest }}"
+        checksum: "{{ maven_sha }}"
+
+    - name: Unpack maven archive
+      ansible.builtin.unarchive:
+         src: "{{ maven_archive }}"
+         dest: "{{ maven_dest }}"
+         extra_opts:
+           - --strip-components=1
 
 
 #- name: Sync repository to master(this is strange, but i just less)

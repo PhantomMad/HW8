@@ -1,6 +1,6 @@
 ---
-git_repository: 'git@github.com:PhantomMad/HW8.git'
-git_local_folder: '/etc/ansible'
-git_branch: 'develop'
+#git_repository: 'git@github.com:PhantomMad/HW8.git'
+#git_local_folder: '/etc/ansible'
+#git_branch: 'develop'
 
 
