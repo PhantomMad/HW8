@@ -38,6 +38,12 @@
          extra_opts:
            - --strip-components=1
 
+    - name: Create link maven to bin
+        ansible.builtin.file:
+          src: "{{ mvn }}"
+          dest: '/bin/mvn'
+          state: link
+
     - name: Remove maven archive
       ansible.builtin.file:
          path: "{{ maven_archive }}"
