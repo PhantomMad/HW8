@@ -5,9 +5,9 @@
   tasks:
     - name: Pull github repository
     - git:
-        repo: {{ git_repository }}
-        version: {{ git_branch }}
-        dest: {{ git_local_folder }}
+        repo: "{{ git_repository }}"
+        version: "{{ git_branch }}"
+        dest: "{{ git_local_folder }}"
         clone: no
         update: yes
 
