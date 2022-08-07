@@ -68,11 +68,9 @@
         update: no
 
     - name: Build java project
-      ansible.builtin.command:
-        args:
-          chdir: "{{ git_clone_tmp }}"
-        argv:
-          - 'mvn package'
+      ansible.builtin.command: 'mvn package'
+      args:
+        chdir: "{{ git_clone_tmp }}"
 
 
     - name: Print result of current build
