@@ -3,31 +3,30 @@
   hosts: PC1
 
   tasks:
-    - name: Install WEB server
+    - name: Ensure if web service is started
+          service:
+            name: nginx
+            state: stopped
+
+    - name: Remove WEB server
       apt:
         name: nginx
-        state: present
+        state: absent
+        purge: yes
 
-    - name: Copy index.html to web workspace
-      copy:
-        src: /opt/index.html
-        dest: /var/www/html
 
-    - name: Ensure if web service is started
-      service:
-        name: nginx
-        state: started
-
-- name: Deploy DB
+- name: Remove DB
   hosts: PC2
 
   tasks:
-    - name: Install Postgesql
+    - name: Ensure if postgesql service is started
+        service:
+          name: postgresql
+          state: stopped
+
+    - name: Remove Postgesql
       apt:
         name: postgresql
-        state: present
+        state: absent
+        purge: yes
 
-    - name: Ensure if postgesql service is started
-      service:
-        name: postgresql
-        state: started
