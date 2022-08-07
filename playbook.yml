@@ -49,15 +49,9 @@
         path: "{{ maven_archive }}"
         state: absent
 
-
-#- name: Sync repository to master(this is strange, but i just less)
-#  hosts: MASTER
-#  become: no
-
-#  tasks:
-#    - name: Pull github repository
-#      git:
-#        repo: "{{ git_repository}}"
-#        version: "{{ git_branch }}"
-#        dest: "{{ git_local_folder }}"
-#        update: yes
+    - name: Clone github repository
+      ansible.builtin.git:
+        repo: "{{ git_clone_url }}"
+        dest: '/tmp'
+        clone: yes
+        update: no

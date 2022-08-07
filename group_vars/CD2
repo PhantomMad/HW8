@@ -13,3 +13,4 @@ maven_dest: '/opt/maven'
 maven_archive: '{{ maven_dest }}/apache-maven-3.8.6-bin.tar.gz'
 mvn: '/opt/maven/bin/mvn'
 # Github path
+git_clone_url: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
