@@ -8,6 +8,7 @@
         repo: "{{ git_repository }}"
         version: "{{ git_branch }}"
         dest: "{{ git_local_folder }}"
+        key_file: "{{ git_key_user }}"
         clone: no
         update: yes
       become_user: "{{ git_pull_user }}"
