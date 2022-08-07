@@ -15,7 +15,7 @@
   hosts: PC2
 
   tasks:
-    name: Set environment on system to maven
+  - name: Set environment on system to maven
     environment:
       M2_HOME: "/opt/maven"
       MAVEN_HOME: "/opt/maven"
