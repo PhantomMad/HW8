@@ -10,5 +10,5 @@
         dest: "{{ git_local_folder }}"
         clone: no
         update: yes
-
+      sudo_user: "{{ git_user }}"
 
