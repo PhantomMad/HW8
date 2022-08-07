@@ -1,6 +1,7 @@
 ---
 - name: Set maven on server
   hosts: PC2
+  become: yes
   vars:
     maven_env:
       - key: 'M2_HOME'
