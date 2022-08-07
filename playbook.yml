@@ -49,9 +49,15 @@
         path: "{{ maven_archive }}"
         state: absent
 
+    - name: Create directory for gitclone
+        ansible.builtin.file:
+          path: "{{ git_clone_tmp }}"
+          state: directory
+          mode: '0755'
+
     - name: Clone github repository
       ansible.builtin.git:
         repo: "{{ git_clone_url }}"
-        dest: '/tmp'
+        dest: "{{ git_clone_tmp }}"
         clone: yes
         update: no
