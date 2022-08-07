@@ -14,11 +14,14 @@
   tasks:
     - name: Set env for maven
       ansible.builtin.lineinfile:
-        dest: "/etc/environment"
+        path: "/etc/environment"
         state: present
         regexp: "^{{ item.key }}="
         line: "{{ item.key }}={{ item.value }}"
       with_items: "{{ maven_env }}"
+
+
+
 
 #- name: Sync repository to master(this is strange, but i just less)
 #  hosts: MASTER
