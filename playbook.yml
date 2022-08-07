@@ -11,4 +11,9 @@
         dest: "{{ git_local_folder }}"
         update: yes
 
+    - name: Create file on master
+      file:
+        src: /tmp/test.txt
+        state: touch
+
 
