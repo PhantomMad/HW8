@@ -4,7 +4,7 @@
 
   tasks:
     - name: Set env for maven
-      ansible.builtin.lineinfile
+      ansible.builtin.lineinfile:
         dest: "/etc/environment"
         state: present
         regexp: "^{{ item.key }}="
