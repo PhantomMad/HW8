@@ -45,9 +45,9 @@
           state: link
 
     - name: Remove maven archive
-      ansible.builtin.file:
-         path: "{{ maven_archive }}"
-         state: absent
+        ansible.builtin.file:
+          path: "{{ maven_archive }}"
+          state: absent
 
 
 #- name: Sync repository to master(this is strange, but i just less)
