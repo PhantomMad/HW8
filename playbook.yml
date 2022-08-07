@@ -68,8 +68,7 @@
         update: no
 
     - name: Build java project
-      ansible.builtin.command:
-        cmd: /opt/maven/bin/mvn package
+      command: 'mvn package'
       args:
         chdir: "{{ git_clone_tmp }}"
 
