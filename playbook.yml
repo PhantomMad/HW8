@@ -6,11 +6,11 @@
   tasks:
     - name: Pull github repository
       git:
-        repo: "{{ git_repository }}"
-        version: "{{ git_branch }}"
-        dest: "{{ git_local_folder }}"
-        key_file: "{{ git_key_user }}"
+        repo: git@github.com:PhantomMad/HW8.git
+        version: develop
+        dest: /etc/ansible
+        key_file: /home/devopsadmin/.ssh/ublrn_1_rsa
         clone: no
         update: yes
-      become_user: "{{ git_pull_user }}"
+      become_user: devopsadmin
 
