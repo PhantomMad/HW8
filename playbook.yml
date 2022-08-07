@@ -4,11 +4,12 @@
 
   tasks:
     - name: Pull github repository
+      sudo_user: "{{ git_user }}"
       git:
         repo: "{{ git_repository }}"
         version: "{{ git_branch }}"
         dest: "{{ git_local_folder }}"
         clone: no
         update: yes
-      sudo_user: "{{ git_user }}"
+
 
