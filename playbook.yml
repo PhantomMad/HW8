@@ -28,6 +28,7 @@
       ansible.builtin.unarchive:
          src: "{{ maven_archive }}"
          dest: "{{ maven_dest }}"
+         remote_src: yes
          extra_opts:
            - --strip-components=1
 
