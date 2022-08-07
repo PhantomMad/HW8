@@ -24,7 +24,7 @@
         state: directory
         mode: '0755'
 
-    - name: Download latest maven
+    - name: Download required maven
       ansible.builtin.get_url:
         url: "{{ maven_link }}"
         dest: "{{ maven_dest }}"
