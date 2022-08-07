@@ -4,6 +4,12 @@
   become: yes
 
   tasks:
+
+    - name: Install Java VM
+      ansible.builtin.apt:
+        name: default-jdk
+        state: latest
+
     - name: Set env for maven
       ansible.builtin.lineinfile:
         path: "/etc/environment"
