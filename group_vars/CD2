@@ -1,8 +1,5 @@
 ---
 #All
-prj_folders:
-  - 'git'
-  - 'rsync'
 
 # Maven path
 maven_env:
