@@ -1,2 +1,14 @@
 ---
+#Tomcat path
+tomcat_env:
+      - key: 'CATALINA_PID'
+        value: '/opt/tomcat/temp/tomcat.pid'
+      - key: 'CATALINA_OPTS'
+        value: '-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+      - key: 'JAVA_HOME'
+        value: '/usr/lib/jvm/java-1.11.0-openjdk-amd64'
+      - key: 'JAVA_OPTS'
+        value: '-Djava.security.egd=file:///dev/urandom'
+      - key: 'PATH'
+        value: '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${JAVA_HOME}/bin"'
 

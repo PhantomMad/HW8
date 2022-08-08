@@ -72,8 +72,21 @@
       args:
         chdir: "{{ git_clone_tmp }}"
 
-
     - name: Print result of current build
       ansible.builtin.debug:
         var: result
         verbosity: 1
+
+- name: Set tomcat on server
+  hosts: CD1
+  become: yes
+  tasks:
+
+    - name: Set env for tomcat
+        ansible.builtin.lineinfile:
+          path: "/etc/environment"
+          state: present
+          regexp: "^{{ item.key }}="
+          line: "{{ item.key }}={{ item.value }}"
+        with_items: "{{ maven_env }}"
+
