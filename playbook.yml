@@ -81,6 +81,7 @@
       ansible.posix.synchronize:
         src: "{{ git_maven_build_files }}"
         dest: 'rsync://10.115.10.121/tmp'
+      delegate_to: CD1
 
 
 
