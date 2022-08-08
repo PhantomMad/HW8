@@ -1,6 +1,6 @@
 ---
 - name: Install Java on required servers
-  hosts: ALL_HW_SERVERS
+  hosts: CD1 CD2
   become: yes
   tasks:
 
@@ -9,6 +9,7 @@
         name: default-jdk
         state: latest
 
+#------------------------------------------------------------
 
 - name: Set maven on server
   hosts: CD2
@@ -75,7 +76,28 @@
     - name: Print result of current build
       ansible.builtin.debug:
         var: result
-        verbosity: 1
+        verbosity: 2
+
+    - name: Get prj files to copy
+      ansible.builtin.find:
+        paths: '{{ git_maven_target }}'
+        patterns: ".*ar"
+        use_regex: True
+      register: java_files
+
+    - name: Set prj files to master
+      ansible.builtin.fetch:
+        src: "{{ item.path }}"
+        dest: '/tmp/'
+        flat: yes
+      with_items: "{{ java_files.files }}"
+
+    - name: Remove project folder
+      ansible.builtin.file:
+        path: "{{ git_clone_tmp }}"
+        state: absent
+
+#----------------------------------------------------------------
 
 - name: Set tomcat on server
   hosts: CD1
@@ -83,10 +105,87 @@
   tasks:
 
     - name: Set env for tomcat
-        ansible.builtin.lineinfile:
-          path: "/etc/environment"
-          state: present
-          regexp: "^{{ item.key }}="
-          line: "{{ item.key }}={{ item.value }}"
-        with_items: "{{ maven_env }}"
+      ansible.builtin.lineinfile:
+        path: "/etc/environment"
+        state: present
+        regexp: "^{{ item.key }}="
+        line: "{{ item.key }}={{ item.value }}"
+      with_items: "{{ tomcat_env }}"
 
+    - name: Create directory for tomcat
+      ansible.builtin.file:
+        path: "{{ tomcat_dest }}"
+        state: directory
+        mode: '0755'
+
+    - name: Download required tomcat
+      ansible.builtin.get_url:
+        url: "{{ tomcat_url }}"
+        dest: "{{ tomcat_dest }}"
+        checksum: "{{ tomcat_sha }}"
+
+    - name: Unpack tomcat archive
+      ansible.builtin.unarchive:
+        src: "{{ tomcat_archive }}"
+        dest: "{{ tomcat_dest }}"
+        remote_src: yes
+        extra_opts:
+          - --strip-components=1
+
+    - name: Remove tomcat archive
+      ansible.builtin.file:
+        path: "{{ tomcat_archive }}"
+        state: absent
+
+    - name: Set prj files to tomcat
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ tomcat_workdir }}"
+      with_fileglob: '/tmp/*.*ar'
+
+    - name: Show what files were copied
+      ansible.builtin.debug:
+        msg: "File to Tomcat webapps {{ item }}"
+      with_fileglob: '/tmp/*.*ar'
+
+    - name: Copy tomcat.service to server
+      ansible.builtin.copy:
+        src: 'tomcat.service'
+        dest: '/etc/systemd/system/'
+
+    - name: Register tomcat.service on server
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Enable tomcat service on startup
+      ansible.builtin.systemd:
+        name: tomcat
+        enabled: yes
+        masked: no
+
+    - name: Run tomcat service
+      ansible.builtin.service:
+         name: tomcat
+         state: started
+
+#-------------------------------------------------------------------------
+
+- name: Clear data on master
+  hosts: MASTER
+  become: yes
+  tasks:
+
+    - name: Get from tmp folder prj files
+      ansible.builtin.find:
+        paths: '/tmp'
+        patterns: ".*ar"
+        use_regex: True
+      register: prj_files
+
+    - name: Delete tmp folder from prj files
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ prj_files.files }}"
+
+#--------------------------------------------------------------------------

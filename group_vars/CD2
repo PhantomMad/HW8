@@ -1,4 +1,9 @@
 ---
+#All
+prj_folders:
+  - 'git'
+  - 'rsync'
+
 # Maven path
 maven_env:
       - key: 'M2_HOME'
@@ -14,10 +19,8 @@ maven_dest: '/opt/maven'
 maven_archive: '{{ maven_dest }}/apache-maven-3.8.6-bin.tar.gz'
 mvn: '/opt/maven/bin/mvn'
 
-build_exten:
-      - value1: '*.war'
-      - value2: '*.jar'
 
 # Github path
 git_clone_url: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
 git_clone_tmp: '/tmp/git'
+git_maven_target: '{{ git_clone_tmp }}/target'
