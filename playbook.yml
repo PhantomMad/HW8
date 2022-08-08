@@ -129,18 +129,11 @@
         path: "{{ tomcat_archive }}"
         state: absent
 
-    - name: Find prj files to tomcat webapps
-      ansible.builtin.find:
-        paths: '/tmp/'
-        patterns: ".*ar"
-        use_regex: True
-      register: java_files
-
     - name: Set prj files to tomcat
       ansible.builtin.copy:
-        src: "{{ item.path }}"
+        src: "{{ item }}"
         dest: "{{ tomcat_workdir }}"
-      with_items: "{{ java_files.files }}"
+      with_items: "{{ java_prj }}"
 
     - name: Show what files were copied
       ansible.builtin.debug:
