@@ -114,3 +114,6 @@
       ansible.builtin.file:
         path: "{{ tomcat_archive }}"
         state: absent
+
+    - name: Run tomcat
+      command: '{{ catalina_run }} run'
