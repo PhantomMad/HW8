@@ -124,7 +124,16 @@
       ansible.builtin.systemd:
         daemon_reload: yes
 
+    - name: Enable tomcat service on startup
+      ansible.builtin.systemd:
+        name: tomcat
+        enabled: yes
+        masked: no
+
+    - name: Run tomcat service
+      ansible.builtin.service:
+         name: tomcat
+         state: started
 
 
-#    - name: Run tomcat
-#      command: '{{ catalina_run }} start'
+
