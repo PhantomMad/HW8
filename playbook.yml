@@ -131,7 +131,7 @@
 
     - name: Find prj files to tomcat webapps
       ansible.builtin.find:
-        paths: '/tmp'
+        paths: '/tmp/'
         patterns: ".*ar"
         use_regex: True
       register: java_files
