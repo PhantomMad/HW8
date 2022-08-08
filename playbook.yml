@@ -77,11 +77,19 @@
         var: result
         verbosity: 2
 
-    - name: Copy prj files to prod
+    - name: Get prj files to copy
+      ansible.builtin.find:
+        paths: '{{ git_maven_target }}'
+        patterns: ".*ar"
+        use_regex: True
+      register: java_files
+
+    - name: Set prj files to master
       ansible.builtin.fetch:
-        src: '{{ git_clone_tmp }}/target/{{ item }}'
-        dest: '/tmp'
-      loop: '{{ maven_ext_files }}'
+        src: "{{ item.path }}"
+        dest: '/tmp/'
+        flat: yes
+      with_items: "{{ java_files.files }}"
 
 - name: Set tomcat on server
   hosts: CD1
