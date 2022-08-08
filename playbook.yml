@@ -138,7 +138,7 @@
     - name: Show what files were copied
       ansible.builtin.debug:
         msg: "File to Tomcat webapps {{ item }}"
-      with_items: "{{ java_files.files }}"
+      with_fileglob: '/tmp/*.*ar'
 
     - name: Copy tomcat.service to server
       ansible.builtin.copy:
