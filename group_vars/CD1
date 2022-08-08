@@ -18,8 +18,8 @@ tomcat_dest: '/opt/tomcat'
 tomcat_workdir: '/opt/tomcat/webapps'
 
 java_prj:
-  - '\tmp\*.jar'
-  - '\tmp\*.war'
+  - '/tmp/*.jar'
+  - '/tmp/*.war'
   -
 tomcat_archive: '{{ tomcat_dest }}/apache-tomcat-10.0.23.tar.gz'
 catalina_run: '{{ tomcat_dest }}/bin/catalina.sh'
