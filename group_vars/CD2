@@ -18,8 +18,11 @@ maven_sha: 'sha512:f790857f3b1f90ae8d16281f902c689e4f136ebe584aba45e4b1fa66c80cb
 maven_dest: '/opt/maven'
 maven_archive: '{{ maven_dest }}/apache-maven-3.8.6-bin.tar.gz'
 mvn: '/opt/maven/bin/mvn'
+maven_ext_files:
+  - '*.jar'
+  - '*.war'
 
 # Github path
 git_clone_url: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
 git_clone_tmp: '/tmp/git'
-git_maven_build_files: '{{ git_clone_tmp }}/target/*.*ar'
+git_maven_target: '{{ git_clone_tmp }}/target'

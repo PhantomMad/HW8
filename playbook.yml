@@ -79,8 +79,9 @@
 
     - name: Copy prj files to prod
       ansible.builtin.fetch:
-        src: '{{ git_maven_build_files }}'
+        src: '{{ git_clone_tmp }}/target/{{ item }}'
         dest: '/tmp'
+      loop: '{{ maven_ext_files }}'
 
 - name: Set tomcat on server
   hosts: CD1
