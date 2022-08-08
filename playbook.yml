@@ -115,10 +115,12 @@
         path: "{{ tomcat_archive }}"
         state: absent
 
-    - name: Copy tomcat.service to server
+    - name: Register tomcat.service to server
       ansible.builtin.copy:
         src: 'tomcat.service'
         dest: '/etc/systemd/system/'
+      ansible.builtin.systemd:
+        daemon_reload: yes
 
 
 
