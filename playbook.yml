@@ -143,9 +143,9 @@
       with_items: "{{ java_files.files }}"
 
     - name: Show what files were copied
-        ansible.builtin.debug:
-          msg: "File to Tomcat webapps {{ item }}"
-        with_items: "{{ java_files.files }}"
+      ansible.builtin.debug:
+        msg: "File to Tomcat webapps {{ item }}"
+      with_items: "{{ java_files.files }}"
 
     - name: Copy tomcat.service to server
       ansible.builtin.copy:
