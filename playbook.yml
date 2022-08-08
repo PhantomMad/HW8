@@ -1,6 +1,6 @@
 ---
 - name: Install Java on required servers
-  hosts: ALL_HW_SERVERS
+  hosts: CD1 CD2
   become: yes
   tasks:
 
