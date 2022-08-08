@@ -20,5 +20,5 @@ git_clone_tmp: '/tmp/git'
 
 #All
 prj_folders:
-        value_g: '/git'
-        value_r: '/rsync'
+  - '/git'
+  - '/rsync'
