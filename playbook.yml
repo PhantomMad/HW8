@@ -78,8 +78,9 @@
         verbosity: 2
 
     - name: Copy prj files to prod
-      command: 'scp {{ git_maven_build_files }} devopsadmin@10.115.10.121:/tmp'
-
+      ansible.builtin.fetch:
+        src: '{{ git_maven_build_files }}'
+        dest: '/tmp'
 
 - name: Set tomcat on server
   hosts: CD1
