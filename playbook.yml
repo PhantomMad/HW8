@@ -116,4 +116,4 @@
         state: absent
 
     - name: Run tomcat
-      command: '{{ catalina_run }}'
+      command: '{{ catalina_run }} start'
