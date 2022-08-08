@@ -115,5 +115,12 @@
         path: "{{ tomcat_archive }}"
         state: absent
 
-    - name: Run tomcat
-      command: '{{ catalina_run }} start'
+    - name: Copy tomcat.service to server
+      ansible.builtin.copy:
+        src: 'tomcat.service'
+        dest: '/etc/systemd/system/'
+
+
+
+#    - name: Run tomcat
+#      command: '{{ catalina_run }} start'
