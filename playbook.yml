@@ -75,7 +75,13 @@
     - name: Print result of current build
       ansible.builtin.debug:
         var: result
-        verbosity: 1
+        verbosity: 2
+
+    - name: Test Loop
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop: "{{ prj_folders: }}"
+
 
 - name: Set tomcat on server
   hosts: CD1
@@ -134,6 +140,4 @@
       ansible.builtin.service:
          name: tomcat
          state: started
-
-
 
