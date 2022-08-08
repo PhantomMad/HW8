@@ -90,3 +90,27 @@
         line: "{{ item.key }}={{ item.value }}"
       with_items: "{{ tomcat_env }}"
 
+    - name: Create directory for tomcat
+      ansible.builtin.file:
+        path: "{{ tomcat_dest }}"
+        state: directory
+        mode: '0755'
+
+    - name: Download required tomcat
+      ansible.builtin.get_url:
+        url: "{{ tomcat_url }}"
+        dest: "{{ tomcat_dest }}"
+        checksum: "{{ tomcat_sha }}"
+
+    - name: Unpack tomcat archive
+      ansible.builtin.unarchive:
+        src: "{{ tomcat_archive }}"
+        dest: "{{ tomcat_dest }}"
+        remote_src: yes
+        extra_opts:
+          - --strip-components=1
+
+    - name: Remove maven archive
+      ansible.builtin.file:
+        path: "{{ tomcat_archive }}"
+        state: absent
