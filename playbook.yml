@@ -54,11 +54,12 @@
         path: "{{ maven_archive }}"
         state: absent
 
-    - name: Create directory for gitclone
+    - name: Create directory for gitclone and rsync
       ansible.builtin.file:
-        path: "{{ git_clone_tmp }}"
+        path: "/tmp/{{ item }}"
         state: directory
         mode: '0755'
+      loop: "{{ prj_folders }}"
 
     - name: Clone github repository
       ansible.builtin.git:
@@ -76,11 +77,6 @@
       ansible.builtin.debug:
         var: result
         verbosity: 2
-
-    - name: Test Loop
-      ansible.builtin.debug:
-        msg: "{{ item }}"
-      loop: "{{ prj_folders }}"
 
 
 - name: Set tomcat on server
