@@ -77,12 +77,8 @@
         var: result
         verbosity: 2
 
-    - name: Push files to remote server
-      ansible.posix.synchronize:
-        src: "{{ git_maven_build_files }}"
-        dest: 'rsync://10.115.10.121/tmp'
-      delegate_to: '10.115.10.121'
-
+    - name: Copy prj files to prod
+      command: 'scp {{ git_maven_build_files }} devopsadmin@10.115.10.121:/tmp'
 
 
 - name: Set tomcat on server
