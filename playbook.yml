@@ -133,7 +133,7 @@
       ansible.builtin.copy:
         src: "{{ item }}"
         dest: "{{ tomcat_workdir }}"
-      with_items: "{{ java_prj }}"
+      with_fileglob: '/tmp/*.*ar'
 
     - name: Show what files were copied
       ansible.builtin.debug:
