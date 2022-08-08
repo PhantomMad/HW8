@@ -80,7 +80,7 @@
     - name: Test Loop
       ansible.builtin.debug:
         msg: "{{ item }}"
-      loop: "{{ prj_folders: }}"
+      loop: "{{ prj_folders }}"
 
 
 - name: Set tomcat on server
