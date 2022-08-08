@@ -22,3 +22,4 @@ mvn: '/opt/maven/bin/mvn'
 # Github path
 git_clone_url: 'https://github.com/boxfuse/boxfuse-sample-java-war-hello.git'
 git_clone_tmp: '/tmp/git'
+git_maven_build_files: '{{ git_clone_tmp }}/target/*.*ar'
