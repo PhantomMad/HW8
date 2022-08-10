@@ -85,7 +85,7 @@
     mode: pull
     src: "{{ item.path }}"
     dest: '/tmp'
-  delegate_to: prod_path
+  delegate_to: 10.115.10.121
   with_items: "{{ java_files.files }}"
 
 
