@@ -18,7 +18,14 @@
 
 - name: Create directory for maven
   ansible.builtin.file:
-    path: "{{ maven_dest }}"
+    path: "{{ maven_folder }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Create directory for maven archive
+  ansible.builtin.file:
+    path: "{{ maven_archive_folder }}"
     state: directory
     mode: '0755'
   become: yes
@@ -26,14 +33,17 @@
 - name: Download required maven
   ansible.builtin.get_url:
     url: "{{ maven_link }}"
-    dest: "{{ maven_dest }}"
+    dest: "{{ maven_archive_folder }}"
     checksum: "{{ maven_sha }}"
   become: yes
+  notify:
+    - Get old maven folder data
+    - Remove old maven files
 
 - name: Unpack maven archive
   ansible.builtin.unarchive:
-    src: "{{ maven_archive }}"
-    dest: "{{ maven_dest }}"
+    src: "{{ maven_archive_distr }}"
+    dest: "{{ maven_folder }}"
     remote_src: yes
     extra_opts:
       - --strip-components=1
@@ -45,12 +55,6 @@
     dest: '/bin/mvn'
     state: link
   become: yes
-
-#- name: Remove maven archive
-#  ansible.builtin.file:
-#    path: "{{ maven_archive }}"
-#    state: absent
-#  become: yes
 
 - name: Create directory for gitclone
   ansible.builtin.file:

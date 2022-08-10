@@ -1,2 +1,16 @@
 ---
 # handlers file for maven_build
+
+- name: Get old maven folder data
+  ansible.builtin.find:
+    path: "{{ maven_folder }}"
+    hidden: true
+    recurse: true
+    file_type: any
+  register: old_maven
+
+- name: Remove old maven files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ old_maven.files }}"
