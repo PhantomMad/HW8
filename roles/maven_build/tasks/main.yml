@@ -59,9 +59,9 @@
     update: no
 
 - name: Build java project
-  command: 'mvn package'
-    args:
-      chdir: "{{ git_clone_tmp }}"
+  ansible.builtin.command: 'mvn package'
+  args:
+    chdir: "{{ git_clone_tmp }}"
 
 #  - name: Get prj files to copy
 #    ansible.builtin.find:
