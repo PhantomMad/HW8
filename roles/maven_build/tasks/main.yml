@@ -1,2 +1,83 @@
 ---
 # tasks file for maven_build
+
+- name: Install Java VM
+  ansible.builtin.apt:
+    name: default-jdk
+    state: latest
+
+- name: Set env for maven
+  ansible.builtin.lineinfile:
+    path: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: "{{ maven_env }}"
+
+  - name: Create directory for maven
+    ansible.builtin.file:
+      path: "{{ maven_dest }}"
+      state: directory
+      mode: '0755'
+
+  - name: Download required maven
+    ansible.builtin.get_url:
+      url: "{{ maven_link }}"
+      dest: "{{ maven_dest }}"
+      checksum: "{{ maven_sha }}"
+
+  - name: Unpack maven archive
+    ansible.builtin.unarchive:
+      src: "{{ maven_archive }}"
+      dest: "{{ maven_dest }}"
+      remote_src: yes
+      extra_opts:
+        - --strip-components=1
+
+  - name: Create link maven to bin
+    ansible.builtin.file:
+      src: "{{ mvn }}"
+      dest: '/bin/mvn'
+      state: link
+
+  - name: Remove maven archive
+    ansible.builtin.file:
+      path: "{{ maven_archive }}"
+      state: absent
+
+  - name: Create directory for gitclone
+    ansible.builtin.file:
+      path: "{{ git_clone_tmp }}"
+      state: directory
+      mode: '0755'
+
+  - name: Clone github repository
+    ansible.builtin.git:
+      repo: "{{ git_clone_url }}"
+      dest: "{{ git_clone_tmp }}"
+      clone: yes
+      update: no
+
+  - name: Build java project
+    command: 'mvn package'
+      args:
+        chdir: "{{ git_clone_tmp }}"
+
+#  - name: Get prj files to copy
+#    ansible.builtin.find:
+#      paths: '{{ git_maven_target }}'
+#      patterns: ".*ar"
+#      use_regex: True
+#    register: java_files
+
+#  - name: Set prj files to master
+#    ansible.builtin.fetch:
+#      src: "{{ item.path }}"
+#      dest: '/tmp/'
+#      flat: yes
+#    with_items: "{{ java_files.files }}"
+
+#  - name: Remove project folder
+#    ansible.builtin.file:
+#      path: "{{ git_clone_tmp }}"
+#      state: absent
