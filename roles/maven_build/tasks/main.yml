@@ -118,7 +118,7 @@
   ansible.posix.synchronize:
     mode: pull
     src: '{{ item.path }}'
-    dest: '/tmp/'
+    dest: '/tmp/git'
   with_items: "{{ prod_files.files }}"
   delegate_to: ublrn-2
 
