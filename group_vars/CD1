@@ -1,21 +1,3 @@
 ---
-#Tomcat path
-tomcat_env:
-      - key: 'CATALINA_PID'
-        value: '/opt/tomcat/temp/tomcat.pid'
-      - key: 'CATALINA_OPTS'
-        value: '-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
-      - key: 'JAVA_HOME'
-        value: '/usr/lib/jvm/java-1.11.0-openjdk-amd64'
-      - key: 'JAVA_OPTS'
-        value: '-Djava.security.egd=file:///dev/urandom'
-      - key: 'PATH'
-        value: '"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${JAVA_HOME}/bin"'
 
-tomcat_url: 'https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.23/bin/apache-tomcat-10.0.23.tar.gz'
-tomcat_sha: 'sha512:0e0263e8280f2ccfb4bef916444a6105fef689a3d95c334c8a7bfe59f1e3966d48ea624727f1818a4df331a603f1ac5e21b908dda3cae676ddc1aef90c2d12ab'
-tomcat_dest: '/opt/tomcat'
-tomcat_workdir: '/opt/tomcat/webapps'
-tomcat_archive: '{{ tomcat_dest }}/apache-tomcat-10.0.23.tar.gz'
-catalina_run: '{{ tomcat_dest }}/bin/catalina.sh'
 
