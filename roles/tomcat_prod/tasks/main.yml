@@ -14,6 +14,7 @@
     path: "{{ tomcat_folder }}"
     state: directory
     mode: '0755'
+  become: yes
 
 - name: Create directory for tomcat archive
   ansible.builtin.file:
@@ -27,6 +28,7 @@
     url: "{{ tomcat_url }}"
     dest: "{{ tomcat_archive_folder }}"
     checksum: "{{ tomcat_sha }}"
+  become: yes
 
 - name: Unpack tomcat archive
   ansible.builtin.unarchive:
@@ -35,6 +37,7 @@
     remote_src: yes
     extra_opts:
       - --strip-components=1
+  become: yes
 
 - name: Get project prod files
   ansible.builtin.find:
@@ -47,29 +50,35 @@
   ansible.builtin.copy:
    src: "{{ item.path }}"
    dest: "{{ tomcat_workdir }}"
+  become: yes
   with_items: "{{ prod_files.files }}"
 
 - name: Drop temporary project folder
   ansible.builtin.file:
     path: "{{ git_tomcat_target }}"
     state: absent
+  become: yes
 
 - name: Copy tomcat.service to server
   ansible.builtin.copy:
     src: 'tomcat.service'
     dest: '/etc/systemd/system/'
+  become: yes
 
 - name: Register tomcat.service on server
   ansible.builtin.systemd:
     daemon_reload: yes
+  become: yes
 
 - name: Enable tomcat service on startup
   ansible.builtin.systemd:
     name: tomcat
     enabled: yes
     masked: no
+  become: yes
 
 - name: Run tomcat service
   ansible.builtin.service:
     name: tomcat
     state: started
+  become: yes
