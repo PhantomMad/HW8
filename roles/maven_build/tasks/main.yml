@@ -90,8 +90,8 @@
     mode: pull
     src: '/tmp/git/target/hello-1.0.war'
 #    src: "{{ item.path }}"
-    dest: '/tmp'
-  delegate_to: 10.115.10.121
+    dest: 'rsync://10.115.10.121/tmp'
+  delegate_to: 10.115.10.122
 #  with_items: "{{ java_files.files }}"
 
 
