@@ -81,6 +81,7 @@
   register: java_files
 
 - name: What files to be copy
+  ansible.builtin.debug:
     msg: "{{ java_files }}"
 
 #- name:  Synchronization using rsync protocol on delegate host (push)
