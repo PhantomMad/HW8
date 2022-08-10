@@ -60,6 +60,6 @@
 
 - name: Build java project
   command: 'mvn package'
-    args:
-      chdir: "{{ git_clone_tmp }}"
+  args:
+    chdir: "{{ git_clone_tmp }}"
 
