@@ -32,7 +32,7 @@
 
 - name: Unpack tomcat archive
   ansible.builtin.unarchive:
-    src: "{{ tomcat_archive_folder }}"
+    src: "{{ tomcat_archive_distr }}"
     dest: "{{ tomcat_folder }}"
     remote_src: yes
     extra_opts:
