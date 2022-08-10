@@ -1,6 +1,9 @@
 ---
 # tasks file for maven_build
 
+- name: Include vault password
+  include_vars: /etc/ansible/hipriv.yml
+
 - name: Install Java VM
   ansible.builtin.apt:
     name: default-jdk
