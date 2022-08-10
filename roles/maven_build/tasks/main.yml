@@ -82,7 +82,7 @@
 
 - name: What files to be copy
   ansible.builtin.debug:
-    msg: "{{ java_files }}"
+    msg: "{{ java_files.path }}"
 
 #- name:  Synchronization using rsync protocol on delegate host (push)
 #  ansible.posix.synchronize:
@@ -97,3 +97,4 @@
   ansible.builtin.file:
     path: "{{ git_clone_tmp }}"
     state: absent
+  become: yes
