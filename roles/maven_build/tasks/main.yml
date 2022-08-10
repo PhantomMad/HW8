@@ -93,8 +93,8 @@
 
 - name:  Synchronization using rsync protocol on delegate host (push)
   ansible.posix.synchronize:
-    src: '/tmp/git/target/hello-1.0.war'
-    dest: '/tmp'
+    src: '/tmp'
+    dest: '/tmp/git/target/hello-1.0.war'
     set_remote_user: yes
   delegate_to: 10.115.10.121
 
