@@ -1,0 +1,85 @@
+---
+# tasks file for tomcat_prod
+
+- name: Set env for tomcat
+  ansible.builtin.lineinfile:
+    path: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: "{{ tomcat_env }}"
+
+- name: Create directory for tomcat
+  ansible.builtin.file:
+    path: "{{ tomcat_folder }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Create directory for tomcat archive
+  ansible.builtin.file:
+    path: "{{ tomcat_archive_folder }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download required tomcat
+  ansible.builtin.get_url:
+    url: "{{ tomcat_url }}"
+    dest: "{{ tomcat_archive_folder }}"
+    checksum: "{{ tomcat_sha }}"
+  become: yes
+
+- name: Unpack tomcat archive
+  ansible.builtin.unarchive:
+    src: "{{ tomcat_archive_distr }}"
+    dest: "{{ tomcat_folder }}"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+  become: yes
+
+- name: Get project prod files
+  ansible.builtin.find:
+    path: "{{ git_tomcat_target }}"
+    use_regex: yes
+    patterns: "^.*?\\.(?:war|jar)$"
+  register: prod_files
+
+- name: Copy project prod files to tomcat
+  ansible.builtin.copy:
+   src: "{{ item.path }}"
+   dest: "{{ tomcat_workdir }}"
+   remote_src: yes
+  become: yes
+  with_items: "{{ prod_files.files }}"
+
+- name: Drop temporary project folder
+  ansible.builtin.file:
+    path: "{{ git_tomcat_target }}"
+    state: absent
+  become: yes
+
+- name: Copy tomcat.service to server
+  ansible.builtin.copy:
+    src: 'tomcat.service'
+    dest: '/etc/systemd/system/'
+  become: yes
+
+- name: Register tomcat.service on server
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  become: yes
+
+- name: Enable tomcat service on startup
+  ansible.builtin.systemd:
+    name: tomcat
+    enabled: yes
+    masked: no
+  become: yes
+
+- name: Run tomcat service
+  ansible.builtin.service:
+    name: tomcat
+    state: started
+  become: yes

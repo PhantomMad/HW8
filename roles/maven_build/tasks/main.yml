@@ -23,20 +23,20 @@
     mode: '0755'
   become: yes
 
-- name: Get old maven folder data
-  ansible.builtin.find:
-    path: "{{ maven_folder }}"
-    hidden: true
-    recurse: true
-    file_type: any
-  register: old_maven
+#- name: Get old maven folder data
+#  ansible.builtin.find:
+#    path: "{{ maven_folder }}"
+#    hidden: true
+#    recurse: true
+#    file_type: any
+#  register: old_maven
 
-- name: Remove old maven files
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: absent
-  become: yes
-  with_items: "{{ old_maven.files }}"
+#- name: Remove old maven files
+#  ansible.builtin.file:
+#    path: "{{ item.path }}"
+#    state: absent
+#  become: yes
+#  with_items: "{{ old_maven.files }}"
 
 - name: Create directory for maven archive
   ansible.builtin.file:
@@ -118,7 +118,7 @@
   ansible.posix.synchronize:
     mode: pull
     src: '{{ item.path }}'
-    dest: '/tmp/'
+    dest: '/tmp/git/'
   with_items: "{{ prod_files.files }}"
   delegate_to: ublrn-2
 

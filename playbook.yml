@@ -3,3 +3,8 @@
   hosts: CD2
   roles:
     - maven_build
+
+- name: Tomcat prod
+  hosts: CD1
+  roles:
+    - tomcat_prod
