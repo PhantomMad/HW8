@@ -46,11 +46,11 @@
     state: link
   become: yes
 
-- name: Remove maven archive
-  ansible.builtin.file:
-    path: "{{ maven_archive }}"
-    state: absent
-  become: yes
+#- name: Remove maven archive
+#  ansible.builtin.file:
+#    path: "{{ maven_archive }}"
+#    state: absent
+#  become: yes
 
 - name: Create directory for gitclone
   ansible.builtin.file:
@@ -97,7 +97,6 @@
     src: '/tmp/git/target/hello-1.0.war'
     dest: '/tmp/'
   delegate_to: 10.115.10.121
-
 
 - name: Remove project folder
   ansible.builtin.file:
