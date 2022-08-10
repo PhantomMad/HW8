@@ -1,2 +1,4 @@
 ---
 ansible_become_pass: '{{ sudo_access }}'
+ansible_connection : 'ssh'
+ansible_user       : 'devopsadmin'
