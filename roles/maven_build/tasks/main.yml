@@ -95,7 +95,7 @@
     src: '/tmp/git/target/hello-1.0.war'
     dest: '/tmp'
     set_remote_user: yes
-  delegate_to: 10.115.10.121
+  delegate_to: 10.115.10.122
 
 
 - name: Remove project folder
