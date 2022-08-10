@@ -83,8 +83,8 @@
 - name:  Synchronization using rsync protocol on delegate host (push)
   ansible.posix.synchronize:
     mode: pull
-      src: "{{ item.path }}"
-      dest: '/tmp'
+    src: "{{ item.path }}"
+    dest: '/tmp'
   delegate_to: prod_path
   with_items: "{{ java_files.files }}"
 
