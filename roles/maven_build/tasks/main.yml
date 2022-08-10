@@ -83,7 +83,7 @@
 - name: What files to be copy
   ansible.builtin.debug:
     msg: "{{ item.path }}"
-  with_items: "{{ java_files.files }}"
+  with_items: "{{ java_files }}"
 
 #- name:  Synchronization using rsync protocol on delegate host (push)
 #  ansible.posix.synchronize:
