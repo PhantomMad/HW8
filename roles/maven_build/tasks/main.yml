@@ -59,25 +59,7 @@
     update: no
 
 - name: Build java project
-  ansible.builtin.command: 'mvn package'
+  ansible.builtin.command: mvn package
     args:
       chdir: "{{ git_clone_tmp }}"
 
-#  - name: Get prj files to copy
-#    ansible.builtin.find:
-#      paths: '{{ git_maven_target }}'
-#      patterns: ".*ar"
-#      use_regex: True
-#    register: java_files
-
-#  - name: Set prj files to master
-#    ansible.builtin.fetch:
-#      src: "{{ item.path }}"
-#      dest: '/tmp/'
-#      flat: yes
-#    with_items: "{{ java_files.files }}"
-
-#  - name: Remove project folder
-#    ansible.builtin.file:
-#      path: "{{ git_clone_tmp }}"
-#      state: absent
