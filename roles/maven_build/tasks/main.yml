@@ -93,6 +93,7 @@
 
 - name:  Synchronization using rsync protocol on delegate host (push)
   ansible.posix.synchronize:
+    mode: pull
     src: '/tmp/git/target/hello-1.0.war'
     dest: '/tmp/'
   delegate_to: 10.115.10.121
