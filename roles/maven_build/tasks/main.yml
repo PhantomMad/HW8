@@ -105,7 +105,7 @@
   ansible.builtin.find:
     path: "{{ git_maven_target }}"
     use_regex: yes
-    patterns: '*.*ar'
+    patterns: "^.*?\\.(?:war|jar)$"
   register: prod_files
 
 # Если запустить без delegate_to то будет отношение между master и текущий slave, где(push) src это источник на
