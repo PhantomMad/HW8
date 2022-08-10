@@ -13,4 +13,5 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
+  become: yes
   with_items: "{{ old_maven.files }}"
