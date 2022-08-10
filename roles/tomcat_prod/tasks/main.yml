@@ -47,7 +47,7 @@
   ansible.builtin.copy:
    src: "{{ item.path }}"
    dest: "{{ tomcat_workdir }}"
-  with_itemc: "{{ prod_files.files }}"
+  with_items: "{{ prod_files.files }}"
 
 - name: Drop temporary project folder
   ansible.builtin.file:
