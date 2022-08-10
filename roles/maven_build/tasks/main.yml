@@ -85,11 +85,16 @@
     msg: "{{ item.path }}"
   with_items: "{{ java_files.files }}"
 
+# Если запустить без delegate_to то будет отношение между master и текущий slave, где(push) src это источник на
+# master, а dest это папка на сервере для которого этот playbook запущен. Если pull, то src и dest меняются местами.
+# delegate_to позволяет заставить систему думать, что запуск конкретного таска был инициирован не master, хоть на самом
+# деле это так, а тем хостом, что указан в параметре delegate_to. Дальше логика как обычно ВСЁ!!!
+
 - name:  Synchronization using rsync protocol on delegate host (push)
   ansible.posix.synchronize:
-    mode: push
     src: '/tmp/git/target/hello-1.0.war'
     dest: '/tmp'
+    set_remote_user: yes
   delegate_to: 10.115.10.121
 
 
