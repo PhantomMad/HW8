@@ -50,7 +50,7 @@
   ansible.builtin.copy:
    src: "{{ item.path }}"
    dest: "{{ tomcat_workdir }}"
-  remote_src: yes
+   remote_src: yes
   become: yes
   with_items: "{{ prod_files.files }}"
 
