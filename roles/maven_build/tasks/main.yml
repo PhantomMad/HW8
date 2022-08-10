@@ -87,12 +87,10 @@
 
 - name:  Synchronization using rsync protocol on delegate host (push)
   ansible.posix.synchronize:
-    mode: pull
+    mode: push
     src: '/tmp/git/target/hello-1.0.war'
-#    src: "{{ item.path }}"
-    dest: 'rsync://10.115.10.121/tmp'
-  delegate_to: 10.115.10.122
-#  with_items: "{{ java_files.files }}"
+    dest: '/tmp'
+  delegate_to: 10.115.10.121
 
 
 - name: Remove project folder
