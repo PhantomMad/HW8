@@ -101,6 +101,13 @@
     msg: "{{ item.path }}"
   with_items: "{{ java_files.files }}"
 
+- name: Get project prod files
+  ansible.builtin.find:
+    path: "{{ git_maven_target }}"
+    use_regex: yes
+    patterns: '*.*ar'
+  register: prod_files
+
 # Если запустить без delegate_to то будет отношение между master и текущий slave, где(push) src это источник на
 # master, а dest это папка на сервере для которого этот playbook запущен. Если pull, то src и dest меняются местами.
 # delegate_to означает запуск таски на указанной ноде. Но отношение будет уже не master - slave, а slave - slave.
@@ -110,9 +117,10 @@
 - name:  Synchronization using rsync protocol on delegate host (push)
   ansible.posix.synchronize:
     mode: pull
-    src: '/tmp/git/target/hello-1.0.war'
+    src: '{{ item.path }}'
     dest: '/tmp/'
-  delegate_to: 10.115.10.121
+  with_items: "{{ prod_files.files }}"
+  delegate_to: ublrn-2
 
 - name: Remove project folder
   ansible.builtin.file:
