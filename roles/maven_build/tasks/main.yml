@@ -5,6 +5,7 @@
   ansible.builtin.apt:
     name: default-jdk
     state: latest
+  become: yes
 
 - name: Set env for maven
   ansible.builtin.lineinfile:
@@ -13,18 +14,21 @@
     regexp: "^{{ item.key }}="
     line: "{{ item.key }}={{ item.value }}"
   with_items: "{{ maven_env }}"
+  become: yes
 
 - name: Create directory for maven
   ansible.builtin.file:
     path: "{{ maven_dest }}"
     state: directory
     mode: '0755'
+  become: yes
 
 - name: Download required maven
   ansible.builtin.get_url:
     url: "{{ maven_link }}"
     dest: "{{ maven_dest }}"
     checksum: "{{ maven_sha }}"
+  become: yes
 
 - name: Unpack maven archive
   ansible.builtin.unarchive:
@@ -33,23 +37,27 @@
     remote_src: yes
     extra_opts:
       - --strip-components=1
+  become: yes
 
 - name: Create link maven to bin
   ansible.builtin.file:
     src: "{{ mvn }}"
     dest: '/bin/mvn'
     state: link
+  become: yes
 
 - name: Remove maven archive
   ansible.builtin.file:
     path: "{{ maven_archive }}"
     state: absent
+  become: yes
 
 - name: Create directory for gitclone
   ansible.builtin.file:
     path: "{{ git_clone_tmp }}"
     state: directory
     mode: '0755'
+  become: yes
 
 - name: Clone github repository
   ansible.builtin.git:
@@ -57,9 +65,11 @@
     dest: "{{ git_clone_tmp }}"
     clone: yes
     update: no
+  become: yes
 
 - name: Build java project
   command: 'mvn package'
   args:
     chdir: "{{ git_clone_tmp }}"
+  become: yes
 

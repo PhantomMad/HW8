@@ -1,6 +1,5 @@
 ---
 - name: Maven build
   hosts: CD2
-  become: yes
   roles:
     - maven_build
