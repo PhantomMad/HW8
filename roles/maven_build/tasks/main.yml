@@ -1,0 +1,129 @@
+---
+# tasks file for maven_build
+
+- name: Install Java VM
+  ansible.builtin.apt:
+    name: default-jdk
+    state: latest
+  become: yes
+
+- name: Set env for maven
+  ansible.builtin.lineinfile:
+    path: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items: "{{ maven_env }}"
+  become: yes
+
+- name: Create directory for maven
+  ansible.builtin.file:
+    path: "{{ maven_folder }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Get old maven folder data
+  ansible.builtin.find:
+    path: "{{ maven_folder }}"
+    hidden: true
+    recurse: true
+    file_type: any
+  register: old_maven
+
+- name: Remove old maven files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  become: yes
+  with_items: "{{ old_maven.files }}"
+
+- name: Create directory for maven archive
+  ansible.builtin.file:
+    path: "{{ maven_archive_folder }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download required maven
+  ansible.builtin.get_url:
+    url: "{{ maven_link }}"
+    dest: "{{ maven_archive_folder }}"
+    checksum: "{{ maven_sha }}"
+  become: yes
+
+- name: Unpack maven archive
+  ansible.builtin.unarchive:
+    src: "{{ maven_archive_distr }}"
+    dest: "{{ maven_folder }}"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+  become: yes
+
+- name: Create link maven to bin
+  ansible.builtin.file:
+    src: "{{ mvn }}"
+    dest: '/bin/mvn'
+    state: link
+  become: yes
+
+- name: Create directory for gitclone
+  ansible.builtin.file:
+    path: "{{ git_clone_tmp }}"
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Clone github repository
+  ansible.builtin.git:
+    repo: "{{ git_clone_url }}"
+    dest: "{{ git_clone_tmp }}"
+    clone: yes
+    update: no
+  become: yes
+
+- name: Build java project
+  command: 'mvn package'
+  args:
+    chdir: "{{ git_clone_tmp }}"
+  become: yes
+
+- name: Search files for production server
+  ansible.builtin.find:
+    paths: "{{ git_maven_target }}"
+    patterns: ".*ar"
+    use_regex: True
+  register: java_files
+
+- name: What files to be copy
+  ansible.builtin.debug:
+    msg: "{{ item.path }}"
+  with_items: "{{ java_files.files }}"
+
+- name: Get project prod files
+  ansible.builtin.find:
+    path: "{{ git_maven_target }}"
+    use_regex: yes
+    patterns: "^.*?\\.(?:war|jar)$"
+  register: prod_files
+
+# Если запустить без delegate_to то будет отношение между master и текущий slave, где(push) src это источник на
+# master, а dest это папка на сервере для которого этот playbook запущен. Если pull, то src и dest меняются местами.
+# delegate_to означает запуск таски на указанной ноде. Но отношение будет уже не master - slave, а slave - slave.
+# Таска ниже означает, что 121 хосту было делегирована задача стащить данные со 122 хоста(изначально таска для него).
+# Мастер тут уже не учавствует непосредственно. По сети, тупо установить rsync и ssh ключи раздать по slave.
+
+- name:  Synchronization using rsync protocol on delegate host (push)
+  ansible.posix.synchronize:
+    mode: pull
+    src: '{{ item.path }}'
+    dest: '/tmp/'
+  with_items: "{{ prod_files.files }}"
+  delegate_to: ublrn-2
+
+- name: Remove project folder
+  ansible.builtin.file:
+    path: "{{ git_clone_tmp }}"
+    state: absent
+  become: yes
