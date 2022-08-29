@@ -1,10 +1,87 @@
 ---
+- name: Create and start
+  hosts: MASTER
+  vars_files:
+    - secret.yml
+  tasks:
+    - name: Install necessary python modules
+      ansible.builtin.pip:
+        name: boto3
+        state: present
+
+    - name:  Create security group for net access
+      amazon.aws.ec2_group:
+        name: WebSSHSG
+        description: AWS access group for ssh access
+        region: ap-north-1
+        aws_access_key: '{{ access_key }}'
+        aws_secret_key: '{{ secret_key }}'
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 8080
+            to_port: 8080
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          - proto: all
+            cidr_ip: 0.0.0.0/0
+
+    - name: launching ec2 instance for build
+        ec2:
+          key_name: sshkey.pem
+          instance_type: t2.micro
+          image: ami-0e306456ff9982cca
+          wait: true
+          count: 1
+          vpc_subnet_id: subnet-3afdd302
+          assign_public_ip: yes
+          region: ap-north-1
+          state: present
+          aws_access_key: "{{ access_key }}"
+          aws_secret_key: "{{ secret_key }}"
+          instance_tags:
+            name: mavenbuild
+        register: ec2maven
+
+    - name: launching ec2 instance for prod
+        ec2:
+          key_name: sshkey.pem
+          instance_type: t2.micro
+          image: ami-0e306786ff9982ccb
+          wait: true
+          group: WebSSHSG
+          count: 1
+          vpc_subnet_id: subnet-3afdd405
+          assign_public_ip: yes
+          region: ap-north-1
+          state: present
+          aws_access_key: "{{ access_key }}"
+          aws_secret_key: "{{ secret_key }}"
+          instance_tags:
+            name: tomcatprod
+        register: ec2tomcat
+
+    - name: Add build instance to host group
+        add_host:
+          hostname: "{{ item.public_ip }}"
+          groupname: buildserver
+        loop: "{{ ec2maven.instances }}"
+
+    - name: Add prod instance to host group
+        add_host:
+          hostname: "{{ item.public_ip }}"
+          groupname: prodserver
+        loop: "{{ ec2tomcat.instances }}"
+
 - name: Maven build
-  hosts: CD2
+  hosts: buildserver
   roles:
     - maven_build
 
 - name: Tomcat prod
-  hosts: CD1
+  hosts: prodserver
   roles:
     - tomcat_prod

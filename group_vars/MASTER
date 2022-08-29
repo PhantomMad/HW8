@@ -1,6 +1,6 @@
 ---
-#git_repository: 'git@github.com:PhantomMad/HW8.git'
-#git_local_folder: '/etc/ansible'
-#git_branch: 'develop'
+ansible_become_pass: '{{ sudo_access }}'
+ansible_connection : 'ssh'
+ansible_user       : 'devopsadmin'
 
 
